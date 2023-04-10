@@ -1,7 +1,9 @@
 # provider_examples
 
 ### [1. naive_state_management](./lib/naive_state_management.dart)
-- After defining the state and methods in the common ancestor parent, when passed down to the lower widget, the lower widget runs (IOC).
+<img src = "images/without_provider.jpeg" width ="600">
+
+- After defining the state and methods in the common ancestor parent, when passed down to the lower widget, the lower widget runs (Inversion Of Control).
 
 ### [2. access_data_with_provider](./lib/access_data_with_provider.dart)
 - Since the provider itself is also a widget, children of the provider widget can access the object returned by the create() method.
