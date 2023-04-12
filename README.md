@@ -77,5 +77,25 @@ The update callback is called in three cases:
 ProxyProviderN is a syntax sugar of ProxyProvider0.
 When possible, it is preferable to use `ChangeNotifierProvider + ProxyProvider`. If the created object is only a combination of other objects, without HTTP calls or similar side-effects
 
+### [15. add_post_frame_callback_example](./lib/add_post_frame_callback_example.dart)
+
+- Error: setState() or markNeedsBuild() called during build.
+- Page rendering process of STF widget:
+  1. Create an element (BuildContext)
+  2. initState (During the process of rendering a page, if the rendering is not finished, we cannot use context to display anything on the screen, like a dialog box or navigation.)
+  3. didChangeDependencies
+  4. Build
+- `addPostFrameCallback`: Executes callback after the current frame is finished. `Future.delayed` and `Future.microtask` also do the same thing.
+- When using addPostFrameCallback based on a condition, it is preferable to place the condition statement at the top. Otherwise, the callback will be registered for every build.
+- Overlay widgets are called to be drawn while the screen is being drawn. This is used for showDialog, Navigator.push, and showBottomSheet.
+- It is not recommended to use `context.watch` outside of build.
+
+### [16. conditional_action_using_provider](./lib/conditional_action_using_provider.dart)
+
+- The first approach is handling the `submit method`, use async await to receive the result and then display the navigation or dialog. If there is an error, it should be rethrown from the provider so that it can be handled from the submit method. This approach might not clearly separate the business logic and UI.
+- The second approach is a way to display navigation or dialogues depending on the app state in the `build()` of the UI. However, since build() is executed more often than expected, a dialogue is displayed in unnecessary situations. and It should be executed in addPostFrameCallback since it is executed within the build method.
+- The third approach is displaying navigation and dialogs within the `provider's method`. Since it requires context, the provider needs to share context, which mixes UI and business logic.
+- The fourth approach is to use ChangeNotifier to register a `listener` (void callback) that listens when notifyListener() is executed and displays navigation and dialog. Since it is not automatically released, it must be manually disposed of. Also, be careful as the listener may be executed by other elements.
+- `First and fourth` methods are preferred.
 ## Reference:
 - https://pub.dev/documentation/provider/latest/
